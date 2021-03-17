@@ -8,7 +8,7 @@ dbConnect();
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
     case "GET":
-      const products = await Product.find().populate("category");
+      const products = await Product.find();
       return res.json({ products });
     case "POST":
       const result = await createProduct(req, res);

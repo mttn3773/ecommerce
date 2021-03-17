@@ -1,6 +1,5 @@
 import { ICreateProduct } from "./../interfaces/product.interface";
 import { string, number, array, object, ValidationError } from "yup";
-import { isValidObjectId } from "mongoose";
 
 export const validateProduct = (
   product: ICreateProduct
@@ -10,11 +9,7 @@ export const validateProduct = (
     price: number().required(),
     description: string(),
     images: array(),
-    category: string()
-      .required()
-      .test("Invalid Input", (category) => {
-        return !!isValidObjectId(category);
-      }),
+    category: string().required(),
   });
   return schema.validate(product).then(
     () => {

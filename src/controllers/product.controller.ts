@@ -20,11 +20,23 @@ export const createProduct = async (
       };
       return { ...mappedErrors };
     }
-    const { category } = product;
-    const isExistingCategory = await Category.findById(category.trim());
-    if (!isExistingCategory)
+    const { category, subcategory } = product;
+    const existingCategory = await Category.findOne({
+      name: category.trim(),
+    });
+
+    if (!existingCategory)
       return createError({ msg: "Category doesnt exists", param: "category" });
-    const newProduct = await Product.create(product);
+    if (
+      subcategory &&
+      !existingCategory.subcategories.includes(subcategory.trim())
+    )
+      return createError({
+        msg: "Subcategory doesnt exists",
+        param: "category",
+      });
+    const newProduct = new Product({ ...product } as ICreateProduct);
+    await newProduct.save();
     return newProduct;
   } catch (error) {
     console.log(error);

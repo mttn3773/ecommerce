@@ -7,9 +7,10 @@ const ProductSchema = new Schema(
     price: { type: Number, required: true, trim: true },
     description: { type: String },
     images: { type: Array, required: true },
-    category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
     inStock: { type: Number, default: 0 },
     sold: { type: Number, default: 0 },
+    category: { type: String, required: true, trim: true },
+    subcategory: { type: String, trim: true },
   },
   { timestamps: true }
 );

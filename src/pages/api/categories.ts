@@ -1,3 +1,4 @@
+import { addSubcategory } from "./../../controllers/category.controller";
 import { createCategory } from "../../controllers/category.controller";
 import { dbConnect } from "../../utils/dbConnect";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -9,12 +10,17 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     case "GET":
       const categories = await Category.find();
       return res.json({ categories });
-    case "POST":
+    case "POST": {
       const result = await createCategory(req, res);
       return res.json({ result });
+    }
     case "DELETE":
       await Category.deleteMany();
       return res.json({ msg: "Deleted" });
+    case "PATCH": {
+      const result = await addSubcategory(req, res);
+      return res.json({ result });
+    }
     default:
       break;
   }

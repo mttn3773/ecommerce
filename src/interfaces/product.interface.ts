@@ -4,6 +4,7 @@ export interface IProduct extends Document {
   price: number;
   descripion?: string;
   images: [];
+  subcategory?: string;
   category: string;
   inStock: number;
   sold: number;
@@ -17,4 +18,5 @@ export interface ICreateProduct {
   description?: string;
   images: [];
   category: string;
+  subcategory?: string;
 }

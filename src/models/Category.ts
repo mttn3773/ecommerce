@@ -7,7 +7,11 @@ const CategorySchema = new Schema(
       type: String,
       required: true,
       trim: true,
-      unique: false,
+      unique: true,
+    },
+    subcategories: {
+      type: Array,
+      trim: true,
     },
   },
   {
