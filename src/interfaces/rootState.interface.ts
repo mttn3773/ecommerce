@@ -1,4 +1,4 @@
-import { ICategory } from "./category.interface";
+import { ICategoryJSON } from "./category.interface";
 import { INotify } from "./notify.interface";
 export interface IActionState {
   type: string;
@@ -7,5 +7,5 @@ export interface IActionState {
 
 export interface IRootState {
   notify: INotify;
-  categories: ICategory[];
+  categories: ICategoryJSON[];
 }
