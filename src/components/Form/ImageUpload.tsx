@@ -1,43 +1,72 @@
-import {
-  FormControl,
-  FormLabel,
-  Input,
-  Textarea,
-  Text,
-} from "@chakra-ui/react";
-import { ErrorMessage, FormikErrors, useField } from "formik";
-import React, { InputHTMLAttributes, useEffect, useState } from "react";
-import { toCapitalize } from "../../utils/toCapitalize";
-interface InputFieldProps
-  extends InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
-  withLabel?: boolean;
-  name: string;
+import { Box, Button, Flex, Input, Text } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { validateImages } from "../../utils/validateImages";
+import { AiOutlineClose } from "react-icons/ai";
+interface InputFieldProps {
+  images: any[];
+  setImages: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
 export const ImageUpload: React.FC<InputFieldProps> = ({
-  withLabel,
-  name,
-  size = "",
-  ...props
+  images,
+  setImages,
 }) => {
-  const [images, setImages] = useState<any[]>([]);
-  useEffect(() => {
-    images && console.log([...images]);
-  }, [images]);
-  return (
-    <FormControl>
-      {withLabel && <FormLabel>{toCapitalize(name)}</FormLabel>}
+  const [error, setError] = useState<string>("");
+  const deleteImage = (image: any) => {
+    return setImages((prev) => prev.filter((img) => img !== image));
+  };
 
+  const uploadImage = async (image: any) => {
+    const data = new FormData();
+    data.append("file", image);
+    data.append("upload_preset", "Ecommerce");
+    const res = await fetch(process.env.CLOUDINARY_UPLOAD_URL!, {
+      method: "POST",
+      body: data,
+    });
+    console.log(res);
+  };
+  return (
+    <>
+      <Text>{error}</Text>
       <Input
-        {...props}
-        onChange={(e) => setImages([...(e as any).target.files])}
-        bgColor="whiteAlpha.500"
-        borderColor="blue.300"
+        name="images"
+        type="file"
         multiple
         accept="image/*"
-        _hover={{ borderColor: "blue.500" }}
-        type="file"
+        onChange={(e: any) => {
+          setError("");
+          const files = [...e.target.files];
+          const { error, newImages } = validateImages(files, images);
+          if (error) return setError(error);
+          setImages([...images, ...newImages]);
+        }}
       />
-    </FormControl>
+      <Flex wrap="wrap">
+        {images.map((img: any, index) => (
+          <Box position="relative" key={index}>
+            <Button onClick={() => uploadImage(img)}> + </Button>
+            <Flex
+              position="absolute"
+              right="1px"
+              top="1px"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <AiOutlineClose
+                cursor="pointer"
+                onClick={() => deleteImage(img)}
+                color="red"
+              />
+            </Flex>
+            <img
+              width="100px"
+              height="100px"
+              src={img.url ? img.url : URL.createObjectURL(img)}
+            />
+          </Box>
+        ))}
+      </Flex>
+    </>
   );
 };
