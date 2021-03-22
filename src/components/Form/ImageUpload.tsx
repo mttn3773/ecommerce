@@ -1,31 +1,31 @@
-import { Box, Button, Flex, Input, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Flex,
+  Input,
+  Text,
+} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { validateImages } from "../../utils/validateImages";
 import { AiOutlineClose } from "react-icons/ai";
+import { FcCheckmark } from "react-icons/fc";
 interface InputFieldProps {
   images: any[];
   setImages: React.Dispatch<React.SetStateAction<any[]>>;
+  progress: [number, number] | null;
 }
 
 export const ImageUpload: React.FC<InputFieldProps> = ({
   images,
   setImages,
+  progress,
 }) => {
   const [error, setError] = useState<string>("");
   const deleteImage = (image: any) => {
     return setImages((prev) => prev.filter((img) => img !== image));
   };
 
-  const uploadImage = async (image: any) => {
-    const data = new FormData();
-    data.append("file", image);
-    data.append("upload_preset", "Ecommerce");
-    const res = await fetch(process.env.CLOUDINARY_UPLOAD_URL!, {
-      method: "POST",
-      body: data,
-    });
-    console.log(res);
-  };
   return (
     <>
       <Text>{error}</Text>
@@ -45,7 +45,6 @@ export const ImageUpload: React.FC<InputFieldProps> = ({
       <Flex wrap="wrap">
         {images.map((img: any, index) => (
           <Box position="relative" key={index}>
-            <Button onClick={() => uploadImage(img)}> + </Button>
             <Flex
               position="absolute"
               right="1px"
@@ -53,11 +52,19 @@ export const ImageUpload: React.FC<InputFieldProps> = ({
               justifyContent="center"
               alignItems="center"
             >
-              <AiOutlineClose
-                cursor="pointer"
-                onClick={() => deleteImage(img)}
-                color="red"
-              />
+              {progress ? (
+                index + 1 <= progress[0] ? (
+                  <FcCheckmark />
+                ) : (
+                  <CircularProgress isIndeterminate color="green.300" />
+                )
+              ) : (
+                <AiOutlineClose
+                  cursor="pointer"
+                  onClick={() => deleteImage(img)}
+                  color="red"
+                />
+              )}
             </Flex>
             <img
               width="100px"

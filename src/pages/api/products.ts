@@ -12,7 +12,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       return res.json({ products });
     case "POST":
       const result = await createProduct(req, res);
-      return res.json({ result });
+      return res.json({ ...result });
     case "DELETE":
       await Product.deleteMany();
       return res.json({ msg: "Deleted" });

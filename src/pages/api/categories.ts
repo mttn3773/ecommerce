@@ -12,14 +12,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       return res.json({ categories });
     case "POST": {
       const result = await createCategory(req, res);
-      return res.json({ result });
+      return res.json({ ...result });
     }
     case "DELETE":
       await Category.deleteMany();
       return res.json({ msg: "Deleted" });
     case "PATCH": {
       const result = await addSubcategory(req, res);
-      return res.json({ result });
+      return res.json({ ...result });
     }
     default:
       break;

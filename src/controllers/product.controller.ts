@@ -1,3 +1,6 @@
+import { IError } from "./../interfaces/error.interface";
+import { IApiResponse } from "./../interfaces/apiResponse.interface";
+import { onSuccessResponse } from "./../utils/onSuccessResponse";
 import { createError } from "./../utils/createError";
 import { validateProduct } from "./../utils/validateProduct";
 import { ICreateProduct } from "./../interfaces/product.interface";
@@ -7,18 +10,23 @@ import Product from "../models/Product";
 export const createProduct = async (
   req: NextApiRequest,
   _res: NextApiResponse
-) => {
+): Promise<IApiResponse> => {
   try {
     const product = req.body as ICreateProduct;
-    if (!product) return;
+    if (!product) return createError({ msg: "Something went wrong" });
     const { isValid, errors } = await validateProduct(product);
     if (!isValid && errors) {
       const mappedErrors = {
-        errors: errors.errors.map((error) => {
-          return { msg: error, param: errors.params?.path };
-        }),
+        errors: errors.errors.map(
+          (error): IError => {
+            return {
+              msg: error,
+              param: errors.params ? (errors.params.path as string) : undefined,
+            };
+          }
+        ),
       };
-      return { ...mappedErrors };
+      return { success: false, ...mappedErrors };
     }
     const { category, subcategory } = product;
     const existingCategory = await Category.findOne({
@@ -37,7 +45,7 @@ export const createProduct = async (
       });
     const newProduct = new Product({ ...product } as ICreateProduct);
     await newProduct.save();
-    return newProduct;
+    return onSuccessResponse({ msg: "Product created", data: { newProduct } });
   } catch (error) {
     console.log(error);
 

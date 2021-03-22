@@ -1,16 +1,21 @@
+import { onSuccessResponse } from "./../utils/onSuccessResponse";
 import { createError } from "./../utils/createError";
 import { NextApiRequest, NextApiResponse } from "next";
 import Category from "../models/Category";
+import { IApiResponse } from "../interfaces/apiResponse.interface";
 export const createCategory = async (
   req: NextApiRequest,
   _res: NextApiResponse
-) => {
+): Promise<IApiResponse> => {
   try {
     const { name } = req.body;
     if (!name) return createError({ msg: "Invalid input", param: "name" });
     const newCategory = new Category({ name });
     await newCategory.save();
-    return newCategory;
+    return onSuccessResponse({
+      msg: "Category created",
+      data: { newCategory },
+    });
   } catch (error) {
     console.log(error);
 
@@ -20,7 +25,7 @@ export const createCategory = async (
 export const addSubcategory = async (
   req: NextApiRequest,
   _res: NextApiResponse
-) => {
+): Promise<IApiResponse> => {
   try {
     const { category, subcategory } = req.body;
     if (!subcategory)
@@ -31,13 +36,13 @@ export const addSubcategory = async (
         msg: "This category doesnt exists",
         param: "category",
       });
-    const newCategory = await existingCategory.updateOne(
-      {
-        subcategories: [...existingCategory.subcategories, subcategory.trim()],
-      },
-      { new: true }
-    );
-    return newCategory;
+    await existingCategory.updateOne({
+      subcategories: [...existingCategory.subcategories, subcategory.trim()],
+    });
+    return onSuccessResponse({
+      msg: "Subcategory created",
+      data: { category, subcategory },
+    });
   } catch (error) {
     console.log(error);
 

@@ -1,37 +1,52 @@
-import { Box, Button, Flex, Select, Text } from "@chakra-ui/react";
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import { Box, Button, Flex, Text } from "@chakra-ui/react";
+import { ErrorMessage, Form, Formik } from "formik";
 import React, { useContext, useState } from "react";
 import { ImageUpload } from "../../components/Form/ImageUpload";
 import { InputField } from "../../components/Form/InputField";
+import { SelectCategory } from "../../components/Form/SelectCategory";
+import { useImageUpload } from "../../hooks/useImageUpload";
+import { ACTIONS } from "../../store/Actions";
 import { DataContext } from "../../store/GlobalState";
-import { uploadImages } from "../../utils/uploadImages";
+import { request } from "../../utils/request";
 import { ProductValidationSchema } from "../../utils/validateProduct";
 interface CreateProductProps {}
 
 const CreateProduct: React.FC<CreateProductProps> = ({}) => {
-  const { state } = useContext(DataContext);
   const [images, setImages] = useState<any[]>([]);
-  const { categories } = state;
+  const { upload, isUploading, progressIndicator } = useImageUpload();
+  const { state, dispatch } = useContext(DataContext);
+  const { notify } = state;
   const handleSubmit = async (values: any) => {
     try {
-      const media = await uploadImages(images);
-      console.log(media);
-
-      const body = JSON.stringify({
+      const media = await upload(images);
+      const body = {
         ...values,
         images: media,
-      });
-      const res = await fetch("/api/products", {
+      };
+      const response = await request({
+        url: "/api/products",
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body,
-      }).then(async (res) => await res.json());
-      console.log(body);
-      return res;
+      });
+      if (response.errors) {
+        dispatch({
+          type: ACTIONS.NOTIFY,
+          payload: { ...notify, errors: response.errors },
+        });
+        return Promise.reject(response.errors[0].msg);
+      }
+      if (response.msg) {
+        dispatch({
+          type: ACTIONS.NOTIFY,
+          payload: {
+            ...notify,
+            success: [{ msg: response.msg }],
+          },
+        });
+      }
+      return Promise.resolve();
     } catch (error) {
-      console.log(error);
+      return Promise.reject();
     }
   };
   return (
@@ -44,12 +59,22 @@ const CreateProduct: React.FC<CreateProductProps> = ({}) => {
         subcategory: "",
       }}
       validationSchema={ProductValidationSchema}
-      onSubmit={(values) => {
-        handleSubmit(values);
+      onSubmit={async (values, { resetForm }) => {
+        await handleSubmit(values);
+        setImages([]);
+        return resetForm();
       }}
     >
-      {({ isSubmitting, setFieldValue }) => (
+      {({ isSubmitting, setFieldValue, values }) => (
         <Form>
+          {JSON.stringify(
+            `IS UPLOADING: ${isUploading}
+              PROGRESS INDICATOR: ${progressIndicator}
+               VALUES: ${JSON.stringify(values)}
+               STATE: ${JSON.stringify(notify)}
+            
+            `
+          )}
           <Flex>
             <Flex direction="column" w="50%">
               <InputField name="title" type="text" withLabel />
@@ -61,28 +86,17 @@ const CreateProduct: React.FC<CreateProductProps> = ({}) => {
                   </Text>
                 )}
               </ErrorMessage>
-              <Field name="category" multiple>
-                {() => (
-                  <Select
-                    onChange={(e: any) => {
-                      setFieldValue("category", e.target.value);
-                    }}
-                    placeholder="Select option"
-                  >
-                    {categories.map((category) => (
-                      <option key={category._id} value={category.name}>
-                        {category.name}
-                      </option>
-                    ))}
-                  </Select>
-                )}
-              </Field>
+              <SelectCategory setFieldValue={setFieldValue} />
               <Button disabled={isSubmitting} type="submit">
                 Submit
               </Button>
             </Flex>
             <Box w="50%">
-              <ImageUpload images={images} setImages={setImages} />
+              <ImageUpload
+                progress={progressIndicator}
+                images={images}
+                setImages={setImages}
+              />
             </Box>
           </Flex>
         </Form>
