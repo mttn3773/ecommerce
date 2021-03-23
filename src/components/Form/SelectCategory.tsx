@@ -51,7 +51,7 @@ export const SelectCategory: React.FC<SelectCategoryProps> = ({
         {() => (
           <Select
             ref={subcategoryRef}
-            placeholder="Select Subcategory"
+            placeholder="No Subcategory"
             disabled={!selectedCategory?.subcategories.length}
             onChange={(e: any) => {
               setFieldValue("subcategory", e.target.value);

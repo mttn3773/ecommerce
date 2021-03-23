@@ -1,15 +1,8 @@
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Flex,
-  Input,
-  Text,
-} from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
-import { validateImages } from "../../utils/validateImages";
+import { Box, CircularProgress, Flex, Input, Text } from "@chakra-ui/react";
+import React, { useEffect, useRef, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { FcCheckmark } from "react-icons/fc";
+import { validateImages } from "../../utils/validateImages";
 interface InputFieldProps {
   images: any[];
   setImages: React.Dispatch<React.SetStateAction<any[]>>;
@@ -25,7 +18,8 @@ export const ImageUpload: React.FC<InputFieldProps> = ({
   const deleteImage = (image: any) => {
     return setImages((prev) => prev.filter((img) => img !== image));
   };
-
+  const imageUploadRef = useRef<HTMLInputElement | null>(null);
+  useEffect(() => {}, [images]);
   return (
     <>
       <Text>{error}</Text>
@@ -33,10 +27,12 @@ export const ImageUpload: React.FC<InputFieldProps> = ({
         name="images"
         type="file"
         multiple
+        ref={imageUploadRef}
         accept="image/*"
-        onChange={(e: any) => {
+        onChange={(e) => {
           setError("");
-          const files = [...e.target.files];
+          imageUploadRef.current!.files = null;
+          const files = [...(e as any).target.files];
           const { error, newImages } = validateImages(files, images);
           if (error) return setError(error);
           setImages([...images, ...newImages]);

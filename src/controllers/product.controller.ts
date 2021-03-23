@@ -7,6 +7,19 @@ import { ICreateProduct } from "./../interfaces/product.interface";
 import { NextApiRequest, NextApiResponse } from "next";
 import Category from "../models/Category";
 import Product from "../models/Product";
+
+export const getProducts = async (
+  req: NextApiRequest,
+  _res: NextApiResponse
+): Promise<IApiResponse> => {
+  try {
+    const products = await Product.find();
+    return { success: true, data: { products } };
+  } catch (error) {
+    return createError({ msg: "Something went wrong" });
+  }
+};
+
 export const createProduct = async (
   req: NextApiRequest,
   _res: NextApiResponse
