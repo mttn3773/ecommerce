@@ -7,6 +7,7 @@ import { SelectCategory } from "../../components/Form/SelectCategory";
 import { useImageUpload } from "../../hooks/useImageUpload";
 import { ACTIONS } from "../../store/Actions";
 import { DataContext } from "../../store/GlobalState";
+import { useRouter } from "next/router";
 import { request } from "../../utils/request";
 import { ProductValidationSchema } from "../../utils/validateProduct";
 interface CreateProductProps {}
@@ -16,6 +17,7 @@ const CreateProduct: React.FC<CreateProductProps> = ({}) => {
   const { upload, isUploading, progressIndicator } = useImageUpload();
   const { state, dispatch } = useContext(DataContext);
   const { notify } = state;
+  const router = useRouter();
   const handleSubmit = async (values: any) => {
     try {
       const media = await upload(images);
@@ -44,7 +46,7 @@ const CreateProduct: React.FC<CreateProductProps> = ({}) => {
           },
         });
       }
-      return Promise.resolve();
+      return;
     } catch (error) {
       return Promise.reject();
     }
@@ -61,8 +63,6 @@ const CreateProduct: React.FC<CreateProductProps> = ({}) => {
       validationSchema={ProductValidationSchema}
       onSubmit={async (values, { resetForm }) => {
         await handleSubmit(values);
-        setImages([]);
-        return resetForm();
       }}
     >
       {({ isSubmitting, setFieldValue, values }) => (

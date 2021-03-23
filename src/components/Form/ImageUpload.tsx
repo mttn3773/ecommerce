@@ -19,7 +19,11 @@ export const ImageUpload: React.FC<InputFieldProps> = ({
     return setImages((prev) => prev.filter((img) => img !== image));
   };
   const imageUploadRef = useRef<HTMLInputElement | null>(null);
-  useEffect(() => {}, [images]);
+  useEffect(() => {
+    if (!imageUploadRef.current) return;
+    imageUploadRef.current.value = "";
+    return;
+  }, [images]);
   return (
     <>
       <Text>{error}</Text>
@@ -31,7 +35,6 @@ export const ImageUpload: React.FC<InputFieldProps> = ({
         accept="image/*"
         onChange={(e) => {
           setError("");
-          imageUploadRef.current!.files = null;
           const files = [...(e as any).target.files];
           const { error, newImages } = validateImages(files, images);
           if (error) return setError(error);
