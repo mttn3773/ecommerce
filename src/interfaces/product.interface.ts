@@ -8,8 +8,8 @@ export interface IProduct extends Document {
   category: string;
   inStock: number;
   sold: number;
-  created_at: string;
-  updated_at: string;
+  createdAt: string;
+  updatedAt: string;
 }
 interface Image {
   public_id: string;
@@ -17,6 +17,7 @@ interface Image {
 }
 
 export interface IProductJson {
+  _id: string;
   title: string;
   price: number;
   descripion?: string;
@@ -25,8 +26,8 @@ export interface IProductJson {
   category: string;
   inStock: number;
   sold: number;
-  created_at: string;
-  updated_at: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ICreateProduct {

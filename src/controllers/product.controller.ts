@@ -1,3 +1,4 @@
+import { APIFeatuers } from "./../utils/APIFeatures";
 import { IError } from "./../interfaces/error.interface";
 import { IApiResponse } from "./../interfaces/apiResponse.interface";
 import { onSuccessResponse } from "./../utils/onSuccessResponse";
@@ -13,9 +14,15 @@ export const getProducts = async (
   _res: NextApiResponse
 ): Promise<IApiResponse> => {
   try {
-    const products = await Product.find();
+    const { query } = req;
+    const features = new APIFeatuers(Product.find(), query)
+      .filtering()
+      .sorting();
+    const products = await features.query;
     return { success: true, data: { products } };
   } catch (error) {
+    console.log(error);
+
     return createError({ msg: "Something went wrong" });
   }
 };
@@ -56,7 +63,13 @@ export const createProduct = async (
         msg: "Subcategory doesnt exists",
         param: "category",
       });
-    const newProduct = new Product({ ...product } as ICreateProduct);
+    const newProduct = new Product({
+      ...product,
+      category: category.toLowerCase(),
+      subcategory: subcategory?.toLowerCase() || "",
+    } as ICreateProduct);
+    console.log(newProduct);
+
     await newProduct.save();
     return onSuccessResponse({ msg: "Product created", data: { newProduct } });
   } catch (error) {

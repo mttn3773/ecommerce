@@ -16,12 +16,14 @@ export const CategoriesList: React.FC<CategoriesListProps> = ({}) => {
       alignItems="center"
       gridGap="2rem"
       pt="3rem"
-      bgColor="gray.100"
+      bgColor="gray.200"
       position="sticky"
       w="20%"
+      h="100vh"
     >
       {categories.map((category) => (
         <Link
+          key={category._id}
           onClick={() => {
             query.category = category.name.toLocaleLowerCase();
             router.push({
