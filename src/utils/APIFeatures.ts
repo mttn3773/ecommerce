@@ -14,12 +14,20 @@ export class APIFeatuers<T extends Document> {
   filtering() {
     if (this.queryString.category && this.queryString.category !== "all")
       this.query.find({ category: this.queryString.category } as any);
+
     return this;
   }
   sorting() {
     if (this.queryString.sort) {
       const value = this.queryString.sort === "newest" ? "" : "-";
       this.query.sort(`${value}createdAt`);
+    }
+    return this;
+  }
+  paginating() {
+    if (this.queryString.page) {
+      const { page } = this.queryString;
+      this.query.skip((parseInt(page[0]) - 1) * 6).limit(6);
     }
     return this;
   }

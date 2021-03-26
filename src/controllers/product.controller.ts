@@ -4,10 +4,11 @@ import { IApiResponse } from "./../interfaces/apiResponse.interface";
 import { onSuccessResponse } from "./../utils/onSuccessResponse";
 import { createError } from "./../utils/createError";
 import { validateProduct } from "./../utils/validateProduct";
-import { ICreateProduct } from "./../interfaces/product.interface";
+import { ICreateProduct, IProduct } from "./../interfaces/product.interface";
 import { NextApiRequest, NextApiResponse } from "next";
 import Category from "../models/Category";
 import Product from "../models/Product";
+import { applyQueryFeatures } from "../utils/createQuery";
 
 export const getProducts = async (
   req: NextApiRequest,
@@ -15,11 +16,9 @@ export const getProducts = async (
 ): Promise<IApiResponse> => {
   try {
     const { query } = req;
-    const features = new APIFeatuers(Product.find(), query)
-      .filtering()
-      .sorting();
-    const products = await features.query;
-    return { success: true, data: { products } };
+
+    const { data, count } = await applyQueryFeatures<IProduct>(Product, query);
+    return { success: true, data: { products: data, count } };
   } catch (error) {
     console.log(error);
 
