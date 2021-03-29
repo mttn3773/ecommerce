@@ -16,7 +16,7 @@ interface Image {
   url: string;
 }
 
-export interface IProductJson {
+export interface IProductJSON {
   _id: string;
   title: string;
   price: number;

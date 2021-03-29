@@ -9,6 +9,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
     case "GET":
       const categories = await Category.find();
+      const indexOfAll = categories.findIndex(
+        (category) => category.name === "All"
+      );
+      if (indexOfAll)
+        [categories[indexOfAll], categories[0]] = [
+          categories[0],
+          categories[indexOfAll],
+        ];
       return res.json({ categories });
     case "POST": {
       const result = await createCategory(req, res);

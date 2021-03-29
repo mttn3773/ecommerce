@@ -19,6 +19,8 @@ export const SortFilter: React.FC<SortFilterProps> = ({}) => {
       <Select onChange={(e) => handleChange(e)}>
         <option>Newest</option>
         <option>Oldest</option>
+        <option>Price: Lowest</option>
+        <option>Price: Highest</option>
       </Select>
     </Box>
   );

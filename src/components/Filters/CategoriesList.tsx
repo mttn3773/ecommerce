@@ -1,5 +1,5 @@
 import { Flex, Link, Text } from "@chakra-ui/layout";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { DataContext } from "../../store/GlobalState";
 import { useRouter } from "next/router";
 import { Accordion, AccordionItem } from "@chakra-ui/accordion";
@@ -16,7 +16,6 @@ export const CategoriesList: React.FC<CategoriesListProps> = ({}) => {
   const { state } = useContext(DataContext);
   const { categories } = state;
   const { pathname, query } = router;
-  console.log(categories);
 
   return (
     <Flex

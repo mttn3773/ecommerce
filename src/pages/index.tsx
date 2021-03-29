@@ -1,21 +1,18 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
-import { GetServerSideProps, GetStaticProps, NextPage } from "next";
-import React, { useContext } from "react";
-import { PageSelector } from "../components/PageSelector";
-import { CategoriesList } from "../components/Product/CategoriesList";
+import { GetServerSideProps, NextPage } from "next";
+import React from "react";
+import { CategoriesList } from "../components/Filters/CategoriesList";
+import { PageSelector } from "../components/Filters/PageSelector";
+import { SortFilter } from "../components/Filters/SortFilter";
 import { ProductCard } from "../components/Product/ProductCard";
-import { SearchFilter } from "../components/Product/SearchFilter";
-import { SortFilter } from "../components/Product/SortFilter";
-import { IProductJson } from "../interfaces/product.interface";
-import { DataContext } from "../store/GlobalState";
+import { IProductJSON } from "../interfaces/product.interface";
 import { request } from "../utils/request";
 interface HomePageProps {
-  products: IProductJson[];
+  products: IProductJSON[];
   count: number;
 }
 
 const Index: NextPage<HomePageProps> = ({ products, count }) => {
-  const { state } = useContext(DataContext);
   return (
     <Flex>
       <CategoriesList />

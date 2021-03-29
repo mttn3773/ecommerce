@@ -1,10 +1,13 @@
 import { ICategory } from "./../interfaces/category.interface";
-import { IActionState } from "./../interfaces/rootState.interface";
+import { IActionState, ICartItem } from "./../interfaces/rootState.interface";
 import { INotify } from "./../interfaces/notify.interface";
+import { IProductJSON } from "../interfaces/product.interface";
 
 export enum ACTIONS {
   NOTIFY = "NOTIFY",
   CATEGORIES = "CATEGORIES",
+  ADD_TO_CART = "ADD_TO_CART",
+  SET_CART = "SET_CART",
 }
 
 export const notify = (payload: INotify): IActionState => {
@@ -13,4 +16,11 @@ export const notify = (payload: INotify): IActionState => {
 
 export const setCategories = (payload: ICategory[]): IActionState => {
   return { type: "CATEGORIES", payload };
+};
+export const addToCart = (payload: IProductJSON): IActionState => {
+  return { type: "ADD_TO_CART", payload };
+};
+
+export const setCar = (payload: ICartItem[]): IActionState => {
+  return { type: "SET_CART", payload };
 };

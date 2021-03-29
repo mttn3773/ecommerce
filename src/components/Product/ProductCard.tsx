@@ -1,11 +1,14 @@
-import { Flex, Heading, Text, Image } from "@chakra-ui/react";
-import React from "react";
-import { IProductJson } from "../../interfaces/product.interface";
+import { Button, Flex, Heading, Image, Text } from "@chakra-ui/react";
+import React, { useContext } from "react";
+import { IProductJSON } from "../../interfaces/product.interface";
+import { ACTIONS } from "../../store/Actions";
+import { DataContext } from "../../store/GlobalState";
 interface ProductCardProps {
-  product: IProductJson;
+  product: IProductJSON;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+  const { dispatch } = useContext(DataContext);
   return (
     <Flex
       direction="column"
@@ -33,6 +36,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           {product.inStock ? `In Stock: ${product.inStock}` : "Out of stock"}
         </Text>
       </Flex>
+      <Button
+        onClick={() => {
+          dispatch({ type: ACTIONS.ADD_TO_CART, payload: product });
+        }}
+      >
+        ADD TO CART
+      </Button>
     </Flex>
   );
 };
