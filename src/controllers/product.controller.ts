@@ -1,15 +1,30 @@
-import { APIFeatuers } from "./../utils/APIFeatures";
-import { IError } from "./../interfaces/error.interface";
-import { IApiResponse } from "./../interfaces/apiResponse.interface";
-import { onSuccessResponse } from "./../utils/onSuccessResponse";
-import { createError } from "./../utils/createError";
-import { validateProduct } from "./../utils/validateProduct";
-import { ICreateProduct, IProduct } from "./../interfaces/product.interface";
 import { NextApiRequest, NextApiResponse } from "next";
 import Category from "../models/Category";
 import Product from "../models/Product";
 import { applyQueryFeatures } from "../utils/createQuery";
+import { IApiResponse } from "./../interfaces/apiResponse.interface";
+import { IError } from "./../interfaces/error.interface";
+import { ICreateProduct, IProduct } from "./../interfaces/product.interface";
+import { createError } from "./../utils/createError";
+import { onSuccessResponse } from "./../utils/onSuccessResponse";
+import { validateProduct } from "./../utils/validateProduct";
 
+export const getProductById = async (
+  req: NextApiRequest,
+  _res: NextApiResponse
+): Promise<IApiResponse> => {
+  try {
+    const { query } = req;
+    const { id } = query;
+    const product = await Product.findById(id);
+    if (!product) return createError({ msg: "Couldn't find product" });
+    return onSuccessResponse({ msg: "Product", data: { product } });
+  } catch (error) {
+    console.log(error);
+
+    return createError({ msg: "Something went wrong" });
+  }
+};
 export const getProducts = async (
   req: NextApiRequest,
   _res: NextApiResponse

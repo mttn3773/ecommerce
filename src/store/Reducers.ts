@@ -10,9 +10,6 @@ export const reducers = (
     case ACTIONS.CATEGORIES:
       return { ...state, categories: action.payload };
     case ACTIONS.ADD_TO_CART:
-      console.log("PAYLOAD :", action.payload);
-      console.log("CART :", state.cart);
-
       const indexOfExistingItem = state.cart.findIndex(
         (cartItem) => cartItem.product._id === action.payload._id
       );
@@ -27,6 +24,24 @@ export const reducers = (
       return { ...state, cart: newCart };
     case ACTIONS.SET_CART: {
       return { ...state, cart: action.payload };
+    }
+
+    case ACTIONS.REMOVE_FROM_CART: {
+      const indexOfExistingItem = state.cart.findIndex(
+        (cartItem) => cartItem.product._id === action.payload._id
+      );
+      if (indexOfExistingItem === -1) return state;
+      const newCart = [...state.cart];
+      newCart[indexOfExistingItem].count -= 1;
+      if (newCart[indexOfExistingItem].count <= 0) {
+        console.log(newCart);
+
+        return {
+          ...state,
+          cart: newCart.filter((_, index) => index !== indexOfExistingItem),
+        };
+      }
+      return { ...state, cart: newCart };
     }
     default:
       return state;

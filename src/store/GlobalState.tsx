@@ -27,7 +27,6 @@ export const DataPovider: React.FC = ({ children }) => {
     dispatch({ type: ACTIONS.SET_CART, payload: cart });
   }, []);
   useEffect(() => {
-    console.log(state.cart);
     localStorage.setItem("CART", JSON.stringify(cart));
   }, [cart]);
 

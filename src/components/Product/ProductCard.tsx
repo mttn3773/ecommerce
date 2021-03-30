@@ -36,7 +36,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           {product.inStock ? `In Stock: ${product.inStock}` : "Out of stock"}
         </Text>
       </Flex>
+      <Button mb="1rem" as="a" href={`/products/${product._id}`}>
+        View Details
+      </Button>
       <Button
+        mb="1rem"
         onClick={() => {
           dispatch({ type: ACTIONS.ADD_TO_CART, payload: product });
         }}

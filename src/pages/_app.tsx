@@ -4,13 +4,16 @@ import theme from "../theme";
 import { AppProps } from "next/app";
 import { DataPovider } from "../store/GlobalState";
 import { Notify } from "../components/Notify/Notify";
+import { Layout } from "../components/Layout/Layout";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <DataPovider>
       <ChakraProvider resetCSS theme={theme}>
-        <Notify />
-        <Component {...pageProps} />
+        <Layout>
+          <Notify />
+          <Component {...pageProps} />
+        </Layout>
       </ChakraProvider>
     </DataPovider>
   );

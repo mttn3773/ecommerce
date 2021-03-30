@@ -1,10 +1,10 @@
-import { dbConnect } from "../../utils/dbConnect";
+import { dbConnect } from "../../../utils/dbConnect";
 import { NextApiRequest, NextApiResponse } from "next";
-import Product from "../../models/Product";
+import Product from "../../../models/Product";
 import {
   createProduct,
   getProducts,
-} from "../../controllers/product.controller";
+} from "../../../controllers/product.controller";
 
 dbConnect();
 

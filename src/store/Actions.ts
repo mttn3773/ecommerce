@@ -8,6 +8,7 @@ export enum ACTIONS {
   CATEGORIES = "CATEGORIES",
   ADD_TO_CART = "ADD_TO_CART",
   SET_CART = "SET_CART",
+  REMOVE_FROM_CART = "REMOVE_FROM_CART",
 }
 
 export const notify = (payload: INotify): IActionState => {
@@ -20,7 +21,9 @@ export const setCategories = (payload: ICategory[]): IActionState => {
 export const addToCart = (payload: IProductJSON): IActionState => {
   return { type: "ADD_TO_CART", payload };
 };
-
+export const removeFromCart = (payload: IProductJSON): IActionState => {
+  return { type: "REMOVE_FROM_CART", payload };
+};
 export const setCar = (payload: ICartItem[]): IActionState => {
   return { type: "SET_CART", payload };
 };
