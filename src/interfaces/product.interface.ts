@@ -11,7 +11,7 @@ export interface IProduct extends Document {
   createdAt: string;
   updatedAt: string;
 }
-interface Image {
+export interface Image {
   public_id: string;
   url: string;
 }

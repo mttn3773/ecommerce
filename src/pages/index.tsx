@@ -48,7 +48,7 @@ const Index: NextPage<HomePageProps> = ({ products, count }) => {
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const category = query.category || "all";
   const subcategory = query.subcategory || "";
-  const sort = query.sort || "";
+  const sort = query.sort || "newest";
   const page = query.page || 1;
   const { data } = await request({
     url: `${process.env.BASE_URL}api/products?category=${category}&sort=${sort}&page=${page}&subcategory=${subcategory}`,
