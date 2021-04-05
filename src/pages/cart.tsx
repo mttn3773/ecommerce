@@ -6,7 +6,7 @@ import { DataContext } from "../store/GlobalState";
 interface CartProps {}
 
 export const Cart: React.FC<CartProps> = ({}) => {
-  const { state, dispatch } = useContext(DataContext);
+  const { state } = useContext(DataContext);
   const { cart } = state;
 
   let totalPrice = 0;

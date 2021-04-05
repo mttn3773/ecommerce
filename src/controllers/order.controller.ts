@@ -16,6 +16,10 @@ export const createCheckoutSession = async (
     const products: IStripePaymentItem[] = req.body;
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
+      shipping_rates: ["shr_1IctvoHcwfHVdZU7Z0zENUqf"],
+      shipping_address_collection: {
+        allowed_countries: ["RU"],
+      },
       line_items: products,
       mode: "payment",
       success_url: `${process.env.BASE_URL}success`,
@@ -25,6 +29,8 @@ export const createCheckoutSession = async (
   } catch (error) {
     console.log(error);
 
-    return createError({ msg: "Something went wrong" });
+    return createError({
+      msg: error.message,
+    });
   }
 };

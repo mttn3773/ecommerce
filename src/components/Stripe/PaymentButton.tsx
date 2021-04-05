@@ -21,7 +21,7 @@ export const PaymentButton: React.FC<PaymentButtonProps> = ({}) => {
         price_data: {
           currency: "usd",
           product_data: {
-            name: item.product.title,
+            name: item.product.title + `: ${item.product._id}`,
             images,
           },
           unit_amount: item.product.price * 100,
@@ -36,13 +36,28 @@ export const PaymentButton: React.FC<PaymentButtonProps> = ({}) => {
       body: producst,
     });
     if (!response.success) {
-      return;
+      return dispatch({
+        type: ACTIONS.NOTIFY,
+        payload: {
+          ...state.notify,
+          errors: [
+            {
+              msg: response.errors
+                ? response.errors[0].msg
+                : "Payment failded. Please try again later",
+            },
+          ],
+        },
+      });
     }
     const { id } = response.data;
     const result = await stripe?.redirectToCheckout({
       sessionId: id,
     });
+
     if (result?.error) {
+      console.log(result?.error);
+
       dispatch({
         type: ACTIONS.NOTIFY,
         payload: {
