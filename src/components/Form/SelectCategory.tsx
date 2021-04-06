@@ -25,37 +25,26 @@ export const SelectCategory: React.FC<SelectCategoryProps> = ({
     selectedCategory,
     setSelectedCategory,
   ] = useState<ICategoryJSON | null>(null);
-  const [selectedSubcategory, setSelectedSubcategory] = useState<
-    number | undefined
-  >(undefined);
-  const categoryRef = useRef<HTMLSelectElement | null>(null);
   const subcategoryRef = useRef<HTMLSelectElement | null>(null);
+  const initialCategoryIndex = categories.findIndex(
+    (category) => category.name.toLowerCase() === initialCategory
+  );
+  const initialSubcategoryIndex = selectedCategory?.subcategories.findIndex(
+    (subcategory) => subcategory.toLowerCase() === initialSubcategory
+  );
   useEffect(() => {
-    if (!categories.length) return;
-    const categoryIndex = categories.findIndex(
-      (category) => category.name.toLowerCase() === initialCategory
-    );
-
-    if (categoryIndex === -1) return;
-    setSelectedCategory(categories[categoryIndex]);
-    const subcategoryIndex = categories[categoryIndex].subcategories.findIndex(
-      (subcategory) => subcategory.toLowerCase() === initialSubcategory
-    );
-    categoryRef.current!.selectedIndex = categoryIndex + 1;
-    setSelectedSubcategory(subcategoryIndex);
-    setFieldValue("category", categoryRef.current!.value);
-  }, [categories]);
-  useEffect(() => {
-    if (!selectedSubcategory) return;
-    subcategoryRef.current!.selectedIndex = selectedSubcategory + 1;
-    setFieldValue("subcategory", subcategoryRef.current!.value);
-  }, [selectedSubcategory, subcategoryRef.current]);
+    if (!(initialCategory || categories)) return;
+    const category =
+      categories.find(
+        (category) => category.name.toLowerCase() === initialCategory
+      ) || null;
+    setSelectedCategory(category);
+  }, [initialCategory, categories]);
   return (
     <Flex>
       <Field name="category" multiple>
         {() => (
           <Select
-            ref={categoryRef}
             placeholder="Select Category"
             onChange={(e: any) => {
               setSelectedCategory(
@@ -68,8 +57,8 @@ export const SelectCategory: React.FC<SelectCategoryProps> = ({
               setFieldValue("subcategory", "");
             }}
           >
-            {categories.map((category) => (
-              <option key={category._id} value={category.name}>
+            {categories.map((category, index) => (
+              <option key={index} selected={initialCategoryIndex === index}>
                 {category.name}
               </option>
             ))}
@@ -87,7 +76,11 @@ export const SelectCategory: React.FC<SelectCategoryProps> = ({
             }}
           >
             {selectedCategory?.subcategories.map((subactegory, index) => (
-              <option key={index} value={subactegory}>
+              <option
+                selected={index === initialSubcategoryIndex}
+                key={index}
+                value={subactegory}
+              >
                 {subactegory}
               </option>
             ))}
