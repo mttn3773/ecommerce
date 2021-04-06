@@ -5,6 +5,7 @@ export const ProductValidationSchema = object().shape({
   title: string().required().min(1).max(32),
   price: number().required(),
   description: string(),
+  inStock: number(),
   images: array(),
   category: string().required(),
   subcategory: string(),

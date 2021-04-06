@@ -1,6 +1,6 @@
 import { Flex, Select } from "@chakra-ui/react";
 import { Field } from "formik";
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { ICategoryJSON } from "../../interfaces/category.interface";
 import { DataContext } from "../../store/GlobalState";
 
@@ -10,9 +10,13 @@ interface SelectCategoryProps {
     value: any,
     shouldValidate?: boolean | undefined
   ) => void;
+  initialCategory?: string;
+  initialSubcategory?: string;
 }
 
 export const SelectCategory: React.FC<SelectCategoryProps> = ({
+  initialCategory,
+  initialSubcategory,
   setFieldValue,
 }) => {
   const { state } = useContext(DataContext);
@@ -21,12 +25,37 @@ export const SelectCategory: React.FC<SelectCategoryProps> = ({
     selectedCategory,
     setSelectedCategory,
   ] = useState<ICategoryJSON | null>(null);
+  const [selectedSubcategory, setSelectedSubcategory] = useState<
+    number | undefined
+  >(undefined);
+  const categoryRef = useRef<HTMLSelectElement | null>(null);
   const subcategoryRef = useRef<HTMLSelectElement | null>(null);
+  useEffect(() => {
+    if (!categories.length) return;
+    const categoryIndex = categories.findIndex(
+      (category) => category.name.toLowerCase() === initialCategory
+    );
+
+    if (categoryIndex === -1) return;
+    setSelectedCategory(categories[categoryIndex]);
+    const subcategoryIndex = categories[categoryIndex].subcategories.findIndex(
+      (subcategory) => subcategory.toLowerCase() === initialSubcategory
+    );
+    categoryRef.current!.selectedIndex = categoryIndex + 1;
+    setSelectedSubcategory(subcategoryIndex);
+    setFieldValue("category", categoryRef.current!.value);
+  }, [categories]);
+  useEffect(() => {
+    if (!selectedSubcategory) return;
+    subcategoryRef.current!.selectedIndex = selectedSubcategory + 1;
+    setFieldValue("subcategory", subcategoryRef.current!.value);
+  }, [selectedSubcategory, subcategoryRef.current]);
   return (
     <Flex>
       <Field name="category" multiple>
         {() => (
           <Select
+            ref={categoryRef}
             placeholder="Select Category"
             onChange={(e: any) => {
               setSelectedCategory(

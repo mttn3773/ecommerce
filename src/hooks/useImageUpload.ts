@@ -11,9 +11,9 @@ export const useImageUpload = () => {
       const newImages = images.filter((img) => !img.url);
       const oldImages = images.filter((img) => img.url);
       setProgressIndicator([0, newImages.length]);
-      if (newImages.length <= 0) return [];
+      if (newImages.length <= 0) return [...oldImages];
       const imgArr: any[] = [];
-      for (const image of images) {
+      for (const image of newImages) {
         const formData = new FormData();
         formData.append("file", image);
         formData.append("upload_preset", "Ecommerce");
@@ -26,6 +26,7 @@ export const useImageUpload = () => {
         setProgressIndicator((prev) => prev && [prev[0] + 1, prev[1]]);
       }
       setIsUploading(false);
+
       return [...oldImages, ...imgArr];
     } catch (error) {
       setProgressIndicator(null);

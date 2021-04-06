@@ -44,8 +44,8 @@ export const ProductDetails: NextPage<ProductDetailsProps> = ({ product }) => {
             {product.inStock ? product.inStock : "Out of stock"}
           </Text>
         </Flex>
-        <Text fontStyle={product.descripion ? "" : "italic"}>
-          {product.descripion ? product.descripion : "No description..."}
+        <Text fontStyle={product.description ? "" : "italic"}>
+          {product.description ? product.description : "No description..."}
         </Text>
         <Button onClick={() => handleAddToCart(product)}>ADD TO CART</Button>
       </Flex>

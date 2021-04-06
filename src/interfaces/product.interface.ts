@@ -2,7 +2,7 @@ import { Document } from "mongoose";
 export interface IProduct extends Document {
   title: string;
   price: number;
-  descripion?: string;
+  description?: string;
   images: Image[];
   subcategory?: string;
   category: string;
@@ -20,7 +20,7 @@ export interface IProductJSON {
   _id: string;
   title: string;
   price: number;
-  descripion?: string;
+  description?: string;
   images: Image[];
   subcategory?: string;
   category: string;
@@ -34,7 +34,8 @@ export interface ICreateProduct {
   title: string;
   price: number;
   description?: string;
-  images: Image[];
+  images?: Image[];
   category: string;
   subcategory?: string;
+  inStock?: number;
 }
