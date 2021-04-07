@@ -10,7 +10,7 @@ const stripe = new Stripe(process.env.STRIPE_SK!, {
 });
 export const createCheckoutSession = async (
   req: NextApiRequest,
-  res: NextApiResponse
+  _res: NextApiResponse
 ): Promise<IApiResponse> => {
   try {
     const products: IStripePaymentItem[] = req.body;

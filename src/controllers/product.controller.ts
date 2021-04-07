@@ -142,3 +142,18 @@ export const createProduct = async (
     return createError({ msg: "Something went wrong" });
   }
 };
+export const deleteProduct = async (
+  req: NextApiRequest,
+  _res: NextApiResponse
+): Promise<IApiResponse> => {
+  try {
+    const { id } = req.query;
+    const product = await Product.findById(id);
+    if (!product) return createError({ msg: "Couldn't find this product" });
+    const result = await product.delete();
+    return onSuccessResponse({ msg: "Product deleted", data: { result } });
+  } catch (error) {
+    console.log(error);
+    return createError({ msg: "Something went wrong" });
+  }
+};

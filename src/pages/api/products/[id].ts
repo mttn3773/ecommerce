@@ -1,4 +1,5 @@
 import {
+  deleteProduct,
   getProductById,
   updateProduct,
 } from "./../../../controllers/product.controller";
@@ -15,6 +16,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
     case "PUT": {
       const result = await updateProduct(req, res);
+      return res.json({ ...result });
+    }
+    case "DELETE": {
+      const result = await deleteProduct(req, res);
       return res.json({ ...result });
     }
     default:

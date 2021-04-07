@@ -1,6 +1,7 @@
 import { Button } from "@chakra-ui/react";
 import { loadStripe } from "@stripe/stripe-js";
 import React, { useContext } from "react";
+import Stripe from "stripe";
 import { IStripePaymentItem } from "../../interfaces/stripePaymentItem.interface";
 import { ACTIONS } from "../../store/Actions";
 import { DataContext } from "../../store/GlobalState";
@@ -13,19 +14,16 @@ export const PaymentButton: React.FC<PaymentButtonProps> = ({}) => {
   const { cart } = state;
   const stripePromise = loadStripe(process.env.STRIPE_PK!);
   const handleClick = async () => {
-    const producst: IStripePaymentItem[] = [];
+    const producst: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
     cart.forEach((item) => {
       const images: string[] = [];
       item.product.images.forEach((image) => images.push(image.url));
       producst.push({
-        price_data: {
-          currency: "usd",
-          product_data: {
-            name: item.product.title + `: ${item.product._id}`,
-            images,
-          },
-          unit_amount: item.product.price * 100,
-        },
+        name: item.product.title,
+        description: `id: ${item.product._id}`,
+        images,
+        currency: "usd",
+        amount: item.product.price * 100,
         quantity: item.count,
       });
     });
