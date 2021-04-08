@@ -11,6 +11,8 @@ module.exports = {
       CLOUDINARY_UPLOAD_URL: "https://api.cloudinary.com/v1_1/demovriwu/image/upload",
       BASE_URL: "http://localhost:3000/",
       STRIPE_PK: "pk_test_51IbQcgHcwfHVdZU74VHu6GO3TphGMxxqus50RSCAb39xOEiSaOFGPPoO94ps4F2f0GKDwF3MTYQmBe80WQiYXyIj00pk8VYGAp",
-      STRIPE_SK: "sk_test_51IbQcgHcwfHVdZU77mWNHzbnnynUmFC657NV9IFbZohQeccXnFKPSu45DMZ88CEbD8rcXJQYfBucrMNIgbH8ni4600LCwa1YnV"
+      STRIPE_SK: "sk_test_51IbQcgHcwfHVdZU77mWNHzbnnynUmFC657NV9IFbZohQeccXnFKPSu45DMZ88CEbD8rcXJQYfBucrMNIgbH8ni4600LCwa1YnV",
+      JWT_SECRET: "13e992e6-9064-448f-8be7-5f9992d0418a",
+      ADMIN_PASSWORD: "123456"
     }
   }
