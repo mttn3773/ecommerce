@@ -1,13 +1,13 @@
 import { Flex } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
-import React, { useContext, useEffect } from "react";
+import { useRouter } from "next/router";
+import React, { useContext } from "react";
+import { useCookies } from "react-cookie";
 import { InputField } from "../../components/Form/InputField";
 import { ACTIONS } from "../../store/Actions";
 import { DataContext } from "../../store/GlobalState";
 import { request } from "../../utils/request";
-import { useCookies } from "react-cookie";
-import { useRouter } from "next/router";
 
 interface PasswordProps {}
 

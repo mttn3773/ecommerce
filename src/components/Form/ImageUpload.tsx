@@ -1,15 +1,14 @@
 import {
   Box,
   Flex,
-  Input,
-  Text,
-  Image,
   FormLabel,
-  InputLeftAddon,
+  Image,
+  Input,
   InputGroup,
+  InputLeftAddon,
+  Text,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { IError } from "../../interfaces/error.interface";
 import { ACTIONS } from "../../store/Actions";
 import { DataContext } from "../../store/GlobalState";
 import { validateImages } from "../../utils/validateImages";

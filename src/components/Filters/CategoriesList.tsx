@@ -1,14 +1,14 @@
-import { Flex, Link, Text } from "@chakra-ui/layout";
-import React, { useContext, useEffect } from "react";
-import { DataContext } from "../../store/GlobalState";
-import { useRouter } from "next/router";
 import { Accordion, AccordionItem } from "@chakra-ui/accordion";
+import { Flex, Link, Text } from "@chakra-ui/layout";
 import {
   AccordionButton,
-  Box,
   AccordionIcon,
   AccordionPanel,
+  Box,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import React, { useContext } from "react";
+import { DataContext } from "../../store/GlobalState";
 interface CategoriesListProps {}
 
 export const CategoriesList: React.FC<CategoriesListProps> = ({}) => {

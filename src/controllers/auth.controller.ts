@@ -4,7 +4,7 @@ import { createError } from "../utils/createError";
 import { onSuccessResponse } from "../utils/onSuccessResponse";
 import { sign } from "jsonwebtoken";
 
-export const signIn = (req: NextApiRequest, res: NextApiResponse) => {
+export const signIn = (req: NextApiRequest, _res: NextApiResponse) => {
   try {
     const { password } = req.body;
     if (!(password === process.env.ADMIN_PASSWORD)) {

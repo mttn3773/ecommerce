@@ -1,4 +1,4 @@
-import { connect, models } from "mongoose";
+import { connect } from "mongoose";
 
 const connection: {
   isConnected?: number;

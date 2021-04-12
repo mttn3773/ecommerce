@@ -2,7 +2,6 @@ import { Button } from "@chakra-ui/react";
 import { loadStripe } from "@stripe/stripe-js";
 import React, { useContext } from "react";
 import Stripe from "stripe";
-import { IStripePaymentItem } from "../../interfaces/stripePaymentItem.interface";
 import { ACTIONS } from "../../store/Actions";
 import { DataContext } from "../../store/GlobalState";
 import { request } from "../../utils/request";

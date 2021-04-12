@@ -1,4 +1,4 @@
-import { Document, FilterQuery, Query } from "mongoose";
+import { Document, Query } from "mongoose";
 
 type QueryString = {
   [key: string]: string | string[];
