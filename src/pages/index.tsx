@@ -51,7 +51,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const sort = query.sort || "newest";
   const page = query.page || 1;
   const { data } = await request({
-    url: `${process.env.BASE_URL}api/products?category=${category}&sort=${sort}&page=${page}&subcategory=${subcategory}`,
+    url: `${process.env.BASE_URL}/api/products?category=${category}&sort=${sort}&page=${page}&subcategory=${subcategory}`,
   });
   if (!data) return { props: {} };
 
