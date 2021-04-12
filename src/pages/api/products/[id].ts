@@ -1,3 +1,4 @@
+import { serverCheckAuthorized } from "./../../../utils/checkAuthorized";
 import {
   deleteProduct,
   getProductById,
@@ -17,12 +18,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       return res.json({ ...result });
     }
     case "PUT": {
-      const result = await updateProduct(req, res);
-      const isAuthorized = checkAuthorized(req);
+      const isAuthorized = serverCheckAuthorized(
+        req.headers["authorization"] || ""
+      );
       if (!isAuthorized) {
         const error = createError({ msg: "You are not authorized" });
         return res.status(401).json({ ...error });
       }
+      const result = await updateProduct(req, res);
+
       return res.json({ ...result });
     }
     case "DELETE": {

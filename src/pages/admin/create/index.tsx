@@ -1,17 +1,19 @@
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import React, { useContext, useEffect } from "react";
 import { ProductForm } from "../../../components/Form/ProductForm";
 import { checkAuthorized } from "../../../utils/checkAuthorized";
 import { useRouter } from "next/router";
 import { DataContext } from "../../../store/GlobalState";
 import { ACTIONS } from "../../../store/Actions";
-interface CreateProductProps {
-  isLogged: boolean;
-}
+import { useCookies } from "react-cookie";
 
-const CreateProduct: React.FC<CreateProductProps> = ({ isLogged }) => {
+interface CreateProductProps {}
+
+const CreateProduct: NextPage<CreateProductProps> = ({}) => {
   const { dispatch, state } = useContext(DataContext);
+  const [cookie, _setCookie] = useCookies(["auth"]);
   const router = useRouter();
+  const isLogged = checkAuthorized(cookie);
   useEffect(() => {
     if (!isLogged) {
       dispatch({
@@ -30,8 +32,4 @@ const CreateProduct: React.FC<CreateProductProps> = ({ isLogged }) => {
   return <ProductForm />;
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const isLogged = checkAuthorized(req);
-  return { props: { isLogged } };
-};
 export default CreateProduct;

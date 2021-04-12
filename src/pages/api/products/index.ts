@@ -1,4 +1,7 @@
-import { checkAuthorized } from "./../../../utils/checkAuthorized";
+import {
+  checkAuthorized,
+  serverCheckAuthorized,
+} from "./../../../utils/checkAuthorized";
 import { dbConnect } from "../../../utils/dbConnect";
 import { NextApiRequest, NextApiResponse } from "next";
 import Product from "../../../models/Product";
@@ -17,7 +20,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       return res.json({ ...result });
     }
     case "POST":
-      const isAuthorized = checkAuthorized(req);
+      const isAuthorized = serverCheckAuthorized(
+        req.headers["authorization"] || ""
+      );
       if (!isAuthorized) {
         const error = createError({ msg: "You are not authorized" });
         return res.status(401).json({ ...error });

@@ -1,6 +1,7 @@
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import { ErrorMessage, Form, Formik } from "formik";
 import React, { useContext, useState } from "react";
+import { useCookies } from "react-cookie";
 import { useImageUpload } from "../../hooks/useImageUpload";
 import { ICreateProduct } from "../../interfaces/product.interface";
 import { ACTIONS } from "../../store/Actions";
@@ -21,6 +22,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   initialValues,
   existingImages,
 }) => {
+  const [cookie, _setCookie] = useCookies();
   const [images, setImages] = useState<any[]>(existingImages || []);
   const { upload, progressIndicator } = useImageUpload();
   const { state, dispatch } = useContext(DataContext);
@@ -36,6 +38,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         url: updating ? `/api/products/${updating}` : "/api/products",
         method: updating ? "PUT" : "POST",
         body,
+        headers: { Authorization: cookie["auth"] },
       });
       if (response.errors) {
         dispatch({
