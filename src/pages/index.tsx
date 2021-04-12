@@ -16,7 +16,6 @@ const Index: NextPage<HomePageProps> = ({ products, count }) => {
   return (
     <Flex>
       <CategoriesList />
-      {process.env.NEXT_PUBLIC_VERCEL_URL}
       <Flex w="80%" direction="column" gridGap="2rem">
         <SortFilter />
         <Flex
@@ -46,15 +45,19 @@ const Index: NextPage<HomePageProps> = ({ products, count }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+export const getServerSideProps: GetServerSideProps = async ({
+  query,
+  req,
+}) => {
+  const protocol = req.headers["x-forwarded-proto"] || "http";
+  const host = req.headers["x-forwarded-host"] || req.headers.host;
+  const baseUrl = `${protocol}://${host}/api`;
   const category = query.category || "all";
   const subcategory = query.subcategory || "";
   const sort = query.sort || "newest";
   const page = query.page || 1;
   const { data } = await request({
-    url: `${
-      process.env.NEXT_PUBLIC_VERCEL_URL || "http://localhost:3000"
-    }/api/products?category=${category}&sort=${sort}&page=${page}&subcategory=${subcategory}`,
+    url: `${baseUrl}/products?category=${category}&sort=${sort}&page=${page}&subcategory=${subcategory}`,
   });
   if (!data) return { props: {} };
 
