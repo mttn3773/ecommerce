@@ -98,8 +98,11 @@ export const getServerSideProps: GetServerSideProps = async ({
   const isLogged = checkAuthorized(req);
   const { id } = query;
   if (!id) return { props: { product: null } };
+  const protocol = req.headers["x-forwarded-proto"] || "http";
+  const host = req.headers["x-forwarded-host"] || req.headers.host;
+  const baseUrl = `${protocol}://${host}/api`;
   const response = await request({
-    url: `${process.env.BASE_URL}api/products/${id}`,
+    url: `${baseUrl}/products/${id}`,
   });
   if (!response.success) return { props: { product: null } };
   const { data } = response;
