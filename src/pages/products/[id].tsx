@@ -1,6 +1,6 @@
 import { Button } from "@chakra-ui/button";
 import { Flex, Heading, Text } from "@chakra-ui/layout";
-import { GetServerSideProps, NextPage } from "next";
+import { GetServerSideProps, NextApiRequest, NextPage } from "next";
 import React, { useContext } from "react";
 import { ImagesList } from "../../components/Product/Details/ImagesList";
 import { IProductJSON } from "../../interfaces/product.interface";
@@ -8,6 +8,7 @@ import { ACTIONS } from "../../store/Actions";
 import { DataContext } from "../../store/GlobalState";
 import { request } from "../../utils/request";
 import { toCapitalize } from "../../utils/toCapitalize";
+import { baseUrl } from "../../utils/baseUrl";
 
 interface ProductDetailsProps {
   product: IProductJSON;
@@ -59,11 +60,10 @@ export const getServerSideProps: GetServerSideProps = async ({
 }) => {
   const { id } = query;
   if (!id) return { props: { product: null } };
-  const protocol = req.headers["x-forwarded-proto"] || "http";
-  const host = req.headers["x-forwarded-host"] || req.headers.host;
-  const baseUrl = `${protocol}://${host}/api`;
+
+  const url = baseUrl(req as NextApiRequest);
   const response = await request({
-    url: `${baseUrl}/products/${id}`,
+    url: `${url}/products/${id}`,
   });
   if (!response.success) return { props: { product: null } };
   const { data } = response;

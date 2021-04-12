@@ -1,3 +1,4 @@
+import { baseUrl } from "./../utils/baseUrl";
 import { NextApiRequest, NextApiResponse } from "next";
 import { IApiResponse } from "../interfaces/apiResponse.interface";
 import { createError } from "../utils/createError";
@@ -22,8 +23,8 @@ export const createCheckoutSession = async (
       },
       line_items: products,
       mode: "payment",
-      success_url: `${process.env.BASE_URL}success`,
-      cancel_url: `${process.env.BASE_URL}cancel`,
+      success_url: `${baseUrl(req)}success`,
+      cancel_url: `${baseUrl(req)}cancel`,
     });
     return onSuccessResponse({ msg: "Success", data: { id: session.id } });
   } catch (error) {

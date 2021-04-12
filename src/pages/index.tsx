@@ -1,11 +1,12 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
-import { GetServerSideProps, NextPage } from "next";
+import { GetServerSideProps, NextApiRequest, NextPage } from "next";
 import React from "react";
 import { CategoriesList } from "../components/Filters/CategoriesList";
 import { PageSelector } from "../components/Filters/PageSelector";
 import { SortFilter } from "../components/Filters/SortFilter";
 import { ProductCard } from "../components/Product/ProductCard";
 import { IProductJSON } from "../interfaces/product.interface";
+import { baseUrl } from "../utils/baseUrl";
 import { request } from "../utils/request";
 interface HomePageProps {
   products: IProductJSON[];
@@ -49,15 +50,13 @@ export const getServerSideProps: GetServerSideProps = async ({
   query,
   req,
 }) => {
-  const protocol = req.headers["x-forwarded-proto"] || "http";
-  const host = req.headers["x-forwarded-host"] || req.headers.host;
-  const baseUrl = `${protocol}://${host}/api`;
+  const url = baseUrl(req as NextApiRequest);
   const category = query.category || "all";
   const subcategory = query.subcategory || "";
   const sort = query.sort || "newest";
   const page = query.page || 1;
   const { data } = await request({
-    url: `${baseUrl}/products?category=${category}&sort=${sort}&page=${page}&subcategory=${subcategory}`,
+    url: `${url}/products?category=${category}&sort=${sort}&page=${page}&subcategory=${subcategory}`,
   });
   if (!data) return { props: {} };
 
