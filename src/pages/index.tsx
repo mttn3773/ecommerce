@@ -15,6 +15,7 @@ interface HomePageProps {
 const Index: NextPage<HomePageProps> = ({ products, count }) => {
   return (
     <Flex>
+      {process.env.NEXT_PUBLIC_VERCEL_URL}
       <CategoriesList />
       <Flex w="80%" direction="column" gridGap="2rem">
         <SortFilter />
